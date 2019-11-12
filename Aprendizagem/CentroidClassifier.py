@@ -14,7 +14,20 @@ class CentroidClassifier(BaseEstimator, ClassifierMixin):
         self.classes_ = unique_labels(y)
         self.X_ = X
         self.y_ = y
+        self.centroides_ = list()
+        for c in self.classes_:
+            classe = list(filter(lambda x: self.y_[self.X_.index(x)] == c, self.X_ ))
+            centroid = [0]*len(self.X_[0])
+            for componente in classe:
+                for i in range(len(componente)):
+                    centroid[i] += componente[i]
+            centroid = list(map(lambda x: x/len(classe), centroid))
+            self.centroides_.append(centroid)
         return self
     
     def predict(self, X):
-        pass
+        resp = list()
+        for x in X:
+            best_dist = 0
+            best_classe = -1
+        return resp
