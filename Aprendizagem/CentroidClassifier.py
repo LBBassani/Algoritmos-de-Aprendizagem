@@ -12,22 +12,29 @@ class CentroidClassifier(BaseEstimator, ClassifierMixin):
     def fit(self, X, y):
         X, y = check_X_y(X, y)
         self.classes_ = unique_labels(y)
-        self.X_ = X
+        self.X_ = list(X)
         self.y_ = y
         self.centroides_ = list()
         for c in self.classes_:
-            classe = list(filter(lambda x: self.y_[self.X_.index(x)] == c, self.X_ ))
+            classe = list()
+            for i in range(len(self.X_)):
+                if self.y_[i] == c:
+                    classe.append(self.X_[i])
             centroid = [0]*len(self.X_[0])
             for componente in classe:
                 for i in range(len(componente)):
                     centroid[i] += componente[i]
             centroid = list(map(lambda x: x/len(classe), centroid))
-            self.centroides_.append(centroid)
+            self.centroides_.append((centroid, c))
         return self
     
     def predict(self, X):
         resp = list()
         for x in X:
-            best_dist = 0
-            best_classe = -1
+            distancias = list()
+            for centroid, c in self.centroides_:
+                dist = distance.euclidean(centroid, x)
+                distancias.append((dist, c))
+            best_dist, best_class = min(distancias)
+            resp.append(best_class)
         return resp
