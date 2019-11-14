@@ -7,7 +7,7 @@ class InvalidNFoldsException(Exception):
 class NFoldsTrainTest(object):
 
     def __init__(self, base, n_folds = 10, random_state = 0, shuffle = False):
-        if len(base.data[0])//n_folds < 1:
+        if len(base.data)//n_folds < 1:
             raise InvalidNFoldsException
         self.__base = base
         self.__nfolds = n_folds
