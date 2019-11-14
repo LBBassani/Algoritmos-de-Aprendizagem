@@ -20,13 +20,7 @@ class OneR(BaseEstimator, ClassifierMixin):
             resp.append(matriz[c])
         return np.array(resp).T
 
-    def fit(self, X, y):
-        X, y = check_X_y(X, y)
-        self.classes_ = unique_labels(y)
-        self.X_ = X
-        self.y_ = y
-        best_predictor = -1
-        best_error = len(self.X_[0])
+    def __calculate_erros(self):
         table = list()
         for i in range(0, len(self.X_[0])):
             predictor_table = list()
@@ -50,10 +44,20 @@ class OneR(BaseEstimator, ClassifierMixin):
             erro = sum(erros)
             print("preditor", i, "erros", erro, "Tabela de Predição", predictor_table)
             table.append((i, erro, predictor_table))
-            # Encontra o preditor com o menor erro
-            if erro <= best_error:
-                best_error = erro
+        return table
+
+    def fit(self, X, y):
+        X, y = check_X_y(X, y)
+        self.classes_ = unique_labels(y)
+        self.X_ = X
+        self.y_ = y
+        best_predictor = -1
+        best_error = len(self.X_)
+        table = self.__calculate_erros()
+        for i, erro, _ in table:
+            if erro < best_error:
                 best_predictor = i
+                best_error = erro
         print("Melhor preditor", best_predictor)
         # Guarda o melhor preditor e a melhor regra no formato [(condição, resposta)]
         self.best_ = best_predictor
