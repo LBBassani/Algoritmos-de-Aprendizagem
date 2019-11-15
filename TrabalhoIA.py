@@ -1,5 +1,6 @@
 from sklearn.model_selection import KFold
 from sklearn import preprocessing
+import pandas as pd
 
 class InvalidNFoldsException(Exception):
     pass
@@ -19,6 +20,7 @@ class NFoldsTrainTest(object):
         else:
             classificador = classifier()
         scores = list()
+        desvios = list()
         X = self.__base.data
         y = self.__base.target
         for train_index, test_index in self.__cv.split(X):
@@ -31,5 +33,6 @@ class NFoldsTrainTest(object):
                 X_bin_train = X_train
                 X_bin_test = X_test
             classificador.fit(X_bin_train, y_train)
+            desvios.append(pd.Series(classificador.predict(X_bin_test)).std())
             scores.append(classificador.score(X_bin_test, y_test))
-        return scores
+        return scores, desvios
