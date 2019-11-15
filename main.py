@@ -17,6 +17,9 @@ from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 
+from TrabalhoIA import NFoldsTrainTest
+import pandas as pd
+
 bases = {
     "iris" : datasets.load_iris(),
     "digits" : datasets.load_digits(),
@@ -39,3 +42,15 @@ classificadoresComHiperparam = {
     "Rede Neural" : (MLPClassifier, {"max_iter" : [50, 100, 200], "hidden_layer_sizes" : [(15,)] } ),
     "Floresta Aleatoria" : (RandomForestClassifier, {"n_estimators" : [10, 20, 50, 100] } )
 }
+
+treinamento = dict()
+for key, base in bases.items():
+    treinamento[key] = dict()
+    treinamento[key]["Treinador"] = NFoldsTrainTest(base)
+    treinamento[key]["Acuracia"] = dict()
+    treinamento[key]["Resultados"] = dict()
+    for ckey, classificador in classificadoresSemHiperparam.items():
+        treinamento[key]["Resultados"][ckey] = treinamento[key]["Treinador"].traintest(classificador[0], **classificador[1])
+        aux = pd.Series(treinamento[key]["Resultados"][ckey][0])
+        print("Scores dos Resultados de", ckey, "na base", key, ":", treinamento[key]["Resultados"][ckey])
+        print("Media das Acuracias", aux.mean())
