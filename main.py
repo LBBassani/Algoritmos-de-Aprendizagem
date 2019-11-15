@@ -17,6 +17,11 @@ from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 
+from TrabalhoIA import NFoldsTrainTest
+import seaborn as sea
+from matplotlib import pyplot as plt
+import pandas as pd
+
 bases = {
     "iris" : datasets.load_iris(),
     "digits" : datasets.load_digits(),
@@ -39,3 +44,31 @@ classificadoresComHiperparam = {
     "Rede Neural" : (MLPClassifier, {"max_iter" : [50, 100, 200], "hidden_layer_sizes" : [(15,)] } ),
     "Floresta Aleatoria" : (RandomForestClassifier, {"n_estimators" : [10, 20, 50, 100] } )
 }
+
+for key, _ in classificadoresSemHiperparam.items():
+    with open("Resultados/Tabelas/" + key.replace(" ", "-") + ".result", "w") as fp:
+        fp.write("Resultados de " + key + "\nBase | Média das Acurácias")
+        for i in range(10):
+            fp.write(" | std Fold " + str(i + 1))
+
+treinamento = dict()
+for key, base in bases.items():
+    treinamento[key] = dict()
+    treinamento[key]["Treinador"] = NFoldsTrainTest(base)
+    treinamento[key]["Acuracia"] = dict()
+    treinamento[key]["Resultados"] = dict()
+    for ckey, classificador in classificadoresSemHiperparam.items():
+        aux = treinamento[key]["Treinador"].traintest(classificador[0], **classificador[1])
+        treinamento[key]["Resultados"][ckey] = aux[2]
+        treinamento[key]["Acuracia"][ckey] = aux[0], aux[1]
+        aux = pd.Series(treinamento[key]["Acuracia"][ckey][0])
+        with open("Resultados/Tabelas/" + ckey.replace(" ", "-") + ".result", "a") as fp:
+            fp.write("\n" + key + " | " + str(pd.Series(treinamento[key]["Acuracia"][ckey][0]).mean()))
+            for v in treinamento[key]["Acuracia"][ckey][1]:
+                fp.write(" | " + str(v))
+        sea.boxplot(data = treinamento[key]["Resultados"][ckey])
+        plt.title("Resultados de " + ckey + " na base " + key + " em cada Fold")
+        plt.ylabel("Classes")
+        plt.xlabel("Folds")
+        plt.savefig("Resultados/Boxplot/folds-" + ckey.replace(" ", "-") + "-" + key.replace(" ", "-") + ".png")
+        plt.clf()

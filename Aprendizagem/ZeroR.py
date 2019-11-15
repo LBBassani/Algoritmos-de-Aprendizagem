@@ -7,7 +7,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.utils.multiclass import unique_labels
 
-from statistics import mode
+from scipy.stats import mode
 
 class ZeroR(BaseEstimator, ClassifierMixin):
     def fit(self, X, y):
@@ -18,4 +18,4 @@ class ZeroR(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, X):
-        return [mode(self.y_)]*len(X)
+        return [int(mode(self.y_)[0][0])]*len(X)

@@ -1,0 +1,6 @@
+Resultados de ZeroR
+Base | Média das Acurácias | std Fold 1 | std Fold 2 | std Fold 3 | std Fold 4 | std Fold 5 | std Fold 6 | std Fold 7 | std Fold 8 | std Fold 9 | std Fold 10
+iris | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0
+digits | 0.09460583488516448 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0
+wine | 0.09444444444444444 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0
+breast cancer | 0.6276629072681704 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0
