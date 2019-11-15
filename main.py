@@ -18,6 +18,8 @@ from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 
 from TrabalhoIA import NFoldsTrainTest
+import seaborn as sea
+from matplotlib import pyplot as plt
 import pandas as pd
 
 bases = {
@@ -28,12 +30,12 @@ bases = {
 }
 
 classificadoresSemHiperparam = {
-    "ZeroR" : (ZeroR, {"discretizar" : False} ),
-    "OneR" : (OneR, {"discretizar" : True} ),
-    "OneR Probabilistico" : (OneRProb, {"discretizar" : True} ),
+    # "ZeroR" : (ZeroR, {"discretizar" : False} ),
+    # "OneR" : (OneR, {"discretizar" : True} ),
+    # "OneR Probabilistico" : (OneRProb, {"discretizar" : True} ),
     "Cassificador Centroide" : (CentroidClassifier, {"discretizar" : False} ),
-    "Centroide OneR" : (OneRCentroid, {"discretizar" : True} ),
-    "Naive Bayes" : (GaussianNB, {"discretizar" : False} )
+    # "Centroide OneR" : (OneRCentroid, {"discretizar" : True} ),
+    # "Naive Bayes" : (GaussianNB, {"discretizar" : False} )
 }
 
 classificadoresComHiperparam = {
@@ -50,7 +52,15 @@ for key, base in bases.items():
     treinamento[key]["Acuracia"] = dict()
     treinamento[key]["Resultados"] = dict()
     for ckey, classificador in classificadoresSemHiperparam.items():
-        treinamento[key]["Resultados"][ckey] = treinamento[key]["Treinador"].traintest(classificador[0], **classificador[1])
-        aux = pd.Series(treinamento[key]["Resultados"][ckey][0])
-        print("Scores dos Resultados de", ckey, "na base", key, ":", treinamento[key]["Resultados"][ckey])
+        aux = treinamento[key]["Treinador"].traintest(classificador[0], **classificador[1])
+        treinamento[key]["Resultados"][ckey] = aux[2]
+        treinamento[key]["Acuracia"][ckey] = aux[0], aux[1]
+        aux = pd.Series(treinamento[key]["Acuracia"][ckey][0])
+        print("Scores dos Resultados de", ckey, "na base", key, ":", treinamento[key]["Acuracia"][ckey])
         print("Media das Acuracias", aux.mean())
+        sea.boxplot(data = treinamento[key]["Resultados"][ckey])
+        plt.title("Resultados de " + ckey + " na base " + key + " em cada Fold")
+        plt.ylabel("Classes")
+        plt.xlabel("Folds")
+        plt.savefig("Resultados/Boxplot/folds-" + ckey.replace(" ", "-") + "-" + key.replace(" ", "-") + ".png")
+        plt.clf()
