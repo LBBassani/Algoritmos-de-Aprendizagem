@@ -30,12 +30,12 @@ bases = {
 }
 
 classificadoresSemHiperparam = {
-    # "ZeroR" : (ZeroR, {"discretizar" : False} ),
-    # "OneR" : (OneR, {"discretizar" : True} ),
-    # "OneR Probabilistico" : (OneRProb, {"discretizar" : True} ),
+    "ZeroR" : (ZeroR, {"discretizar" : False} ),
+    "OneR" : (OneR, {"discretizar" : True} ),
+    "OneR Probabilistico" : (OneRProb, {"discretizar" : True} ),
     "Cassificador Centroide" : (CentroidClassifier, {"discretizar" : False} ),
-    # "Centroide OneR" : (OneRCentroid, {"discretizar" : True} ),
-    # "Naive Bayes" : (GaussianNB, {"discretizar" : False} )
+    "Centroide OneR" : (OneRCentroid, {"discretizar" : True} ),
+    "Naive Bayes" : (GaussianNB, {"discretizar" : False} )
 }
 
 classificadoresComHiperparam = {
@@ -44,6 +44,12 @@ classificadoresComHiperparam = {
     "Rede Neural" : (MLPClassifier, {"max_iter" : [50, 100, 200], "hidden_layer_sizes" : [(15,)] } ),
     "Floresta Aleatoria" : (RandomForestClassifier, {"n_estimators" : [10, 20, 50, 100] } )
 }
+
+for key, _ in classificadoresSemHiperparam.items():
+    with open("Resultados/Tabelas/" + key.replace(" ", "-") + ".result", "w") as fp:
+        fp.write("Resultados de " + key + "\nBase | Média das Acurácias")
+        for i in range(10):
+            fp.write(" | std Fold " + str(i + 1))
 
 treinamento = dict()
 for key, base in bases.items():
@@ -56,8 +62,10 @@ for key, base in bases.items():
         treinamento[key]["Resultados"][ckey] = aux[2]
         treinamento[key]["Acuracia"][ckey] = aux[0], aux[1]
         aux = pd.Series(treinamento[key]["Acuracia"][ckey][0])
-        print("Scores dos Resultados de", ckey, "na base", key, ":", treinamento[key]["Acuracia"][ckey])
-        print("Media das Acuracias", aux.mean())
+        with open("Resultados/Tabelas/" + ckey.replace(" ", "-") + ".result", "a") as fp:
+            fp.write("\n" + key + " | " + str(pd.Series(treinamento[key]["Acuracia"][ckey][0]).mean()))
+            for v in treinamento[key]["Acuracia"][ckey][1]:
+                fp.write(" | " + str(v))
         sea.boxplot(data = treinamento[key]["Resultados"][ckey])
         plt.title("Resultados de " + ckey + " na base " + key + " em cada Fold")
         plt.ylabel("Classes")
