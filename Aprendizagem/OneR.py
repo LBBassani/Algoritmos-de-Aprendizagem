@@ -42,7 +42,6 @@ class OneR(BaseEstimator, ClassifierMixin):
                 erros.append(erro)
                 predictor_table.append((valor, classe_mais_frequente))
             erro = sum(erros)
-            print("preditor", i, "erros", erro, "Tabela de Predição", predictor_table)
             table.append((i, erro, predictor_table))
         return table
 
@@ -58,11 +57,9 @@ class OneR(BaseEstimator, ClassifierMixin):
             if erro < best_error:
                 best_predictor = i
                 best_error = erro
-        print("Melhor preditor", best_predictor)
         # Guarda o melhor preditor e a melhor regra no formato [(condição, resposta)]
         self.best_ = best_predictor
         self.regra_ = table[best_predictor][2]
-        print("Regras", self.regra_)
         return self
 
     def predict(self, X):

@@ -22,11 +22,9 @@ class OneRProb(OneR, BaseEstimator, ClassifierMixin):
         best_error = len(self.X_)
         table = self._OneR__calculate_erros()
         best_predictor, best_error = self.__roleta(table)
-        print("Melhor preditor", best_predictor)
         # Guarda o melhor preditor e a melhor regra no formato [(condição, resposta)]
         self.best_ = best_predictor
         self.regra_ = table[best_predictor][2]
-        print("Regras", self.regra_)
         return self
 
     def __roleta(self, estados):
@@ -37,7 +35,6 @@ class OneRProb(OneR, BaseEstimator, ClassifierMixin):
         total = sum(list(map(lambda x: 1/x[1], estados)))
         porcentagens = list(map(lambda x: (x, (1/x[1])/total),estados))
 
-        print("Chances de Escolher cada Preditor:", porcentagens)
         faixaSobrevivencia = list()
         limiteInf = 0
         for e in porcentagens:
