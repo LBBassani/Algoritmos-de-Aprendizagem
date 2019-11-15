@@ -21,6 +21,7 @@ class NFoldsTrainTest(object):
             classificador = classifier()
         scores = list()
         desvios = list()
+        resultados = list()
         X = self.__base.data
         y = self.__base.target
         for train_index, test_index in self.__cv.split(X):
@@ -33,6 +34,8 @@ class NFoldsTrainTest(object):
                 X_bin_train = X_train
                 X_bin_test = X_test
             classificador.fit(X_bin_train, y_train)
-            desvios.append(pd.Series(classificador.predict(X_bin_test)).std())
+            y_pred = classificador.predict(X_bin_test)
+            resultados.append(y_pred)
+            desvios.append(pd.Series(y_pred).std())
             scores.append(classificador.score(X_bin_test, y_test))
-        return scores, desvios
+        return scores, desvios, resultados
