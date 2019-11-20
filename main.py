@@ -35,26 +35,22 @@ bases = {
     "breast cancer" : datasets.load_breast_cancer()
 }
 
-# Classificadores para realização do experimento sem hiperparâmetros
-classificadoresSemHiperparam = {
+# Classificadores para realização do experimento
+classificadores = {
     "ZeroR" : (ZeroR, {"discretizar" : False} ),
     "OneR" : (OneR, {"discretizar" : True} ),
     "OneR Probabilistico" : (OneRProb, {"discretizar" : True} ),
     "Cassificador Centroide" : (CentroidClassifier, {"discretizar" : False} ),
     "Centroide OneR" : (OneRCentroid, {"discretizar" : True} ),
-    "Naive Bayes" : (GaussianNB, {"discretizar" : False} )
-}
-
-# Classificadores para realização do experimento com hiperparâmetros
-classificadoresComHiperparam = {
-    "knn" : (KNeighborsClassifier, {"n_neighbors" : [1, 3, 5, 7, 10] } ),
-    "Arvore de Decisao" : (DecisionTreeClassifier, {"max_depth" : [None, 3, 5, 10] } ),
-    "Rede Neural" : (MLPClassifier, {"max_iter" : [50, 100, 200], "hidden_layer_sizes" : [(15,)] } ),
-    "Floresta Aleatoria" : (RandomForestClassifier, {"n_estimators" : [10, 20, 50, 100] } )
+    "Naive Bayes" : (GaussianNB, {"discretizar" : False} ),
+    "knn" : (KNeighborsClassifier, {"hiperparametros" : {"n_neighbors" : [1, 3, 5, 7, 10] } } ),
+    "Arvore de Decisao" : (DecisionTreeClassifier, {"hiperparametros" : {"max_depth" : [None, 3, 5, 10] } } ),
+    "Rede Neural" : (MLPClassifier, {"hiperparametros" : {"max_iter" : [50, 100, 200], "hidden_layer_sizes" : [(15,)] } } ),
+    "Floresta Aleatoria" : (RandomForestClassifier, {"hiperparametros" : {"n_estimators" : [10, 20, 50, 100] } } )
 }
 
 # Arquivos para impressão das tabelas de resultados
-for key, _ in classificadoresSemHiperparam.items():
+for key, _ in classificadores.items():
     with open("Resultados/Tabelas/" + key.replace(" ", "-") + ".result", "w") as fp:
         fp.write("Resultados de " + key + "\nBase | Média das Acurácias")
         for i in range(10):
@@ -67,7 +63,7 @@ for key, base in bases.items():
     treinamento[key]["Treinador"] = NFoldsTrainTest(base)
     treinamento[key]["Acuracia"] = dict()
     treinamento[key]["Resultados"] = dict()
-    for ckey, classificador in classificadoresSemHiperparam.items():
+    for ckey, classificador in classificadores.items():
         aux = treinamento[key]["Treinador"].traintest(classificador[0], **classificador[1])
         treinamento[key]["Resultados"][ckey] = aux[2]
         treinamento[key]["Acuracia"][ckey] = aux[0], aux[1]
@@ -86,11 +82,16 @@ for key, base in bases.items():
 # Impressão dos boxlplots das acurácias de cada classificador
 for key, base in treinamento.items():
     resultadosBase = list()
+    i = 1
+    legendas = list()
     for ckey, resul in base["Acuracia"].items():
-        resultadosBase.append(pd.DataFrame(resul).assign(Algoritmo = ckey))
+        resultadosBase.append(pd.DataFrame(resul).assign(Algoritmo = i))
+        legendas.append(str(i) + " - " + ckey)
+        i += 1
     resultadosBase = pd.concat(resultadosBase)
     resultadosBase = pd.melt(resultadosBase, id_vars=["Algoritmo"], value_name = "Resultados")
     sea.boxplot(x = "Algoritmo", y = "Resultados", data = resultadosBase)
     plt.title("Acurácia dos Experimentos na Base " + key)
-    plt.savefig("Resultados/Boxplot/acuracia-" + key.replace(" ", "-") + ".png")
+    plt.legend(legendas, handlelength=0, loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.savefig("Resultados/Boxplot/acuracia-" + key.replace(" ", "-") + ".png", bbox_inches="tight")
     plt.clf()
