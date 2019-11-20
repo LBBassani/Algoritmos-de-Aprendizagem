@@ -1,4 +1,4 @@
-from sklearn.model_selection import KFold
+from sklearn.model_selection import KFold, GridSearchCV
 from sklearn import preprocessing
 import pandas as pd
 
@@ -7,16 +7,17 @@ class InvalidNFoldsException(Exception):
 
 class NFoldsTrainTest(object):
 
-    def __init__(self, base, n_folds = 10, random_state = 0, shuffle = False):
+    def __init__(self, base, n_folds = 10, n_cycles = 4, random_state = 0, shuffle = False):
         if len(base.data)//n_folds < 1:
             raise InvalidNFoldsException
         self.__base = base
         self.__nfolds = n_folds
+        self.__ncycles = n_cycles
         self.__cv = KFold(n_splits = n_folds, random_state = random_state, shuffle = shuffle)
     
     def traintest(self, classifier, discretizar = False, hiperparametros = None):
         if hiperparametros is not None:
-            classificador = classifier(hiperparametros)
+            classificador = GridSearchCV(classifier(),hiperparametros, cv = self.__ncycles, verbose=0)
         else:
             classificador = classifier()
         scores = list()
@@ -33,7 +34,11 @@ class NFoldsTrainTest(object):
             else:
                 X_bin_train = X_train
                 X_bin_test = X_test
-            classificador.fit(X_bin_train, y_train)
+            if hiperparametros is not None: # Realiza treinamento, validação e teste com hiperparâmetros
+                classificador.fit(X_train, y_train)
+                print(classificador.best_params_, classificador.best_score_)
+            else: # Realiza treinamento e teste sem hiperparâmetros
+                classificador.fit(X_bin_train, y_train)
             y_pred = classificador.predict(X_bin_test)
             resultados.append(y_pred)
             desvios.append(pd.Series(y_pred).std())
