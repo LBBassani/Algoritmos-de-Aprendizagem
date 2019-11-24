@@ -44,17 +44,11 @@ classificadores = {
     "Centroide OneR" : (OneRCentroid, {"discretizar" : True} ),
     "Naive Bayes" : (GaussianNB, {"discretizar" : False} ),
     "knn" : (KNeighborsClassifier, {"hiperparametros" : {"n_neighbors" : [1, 3, 5, 7, 10] } } ),
-    "Arvore de Decisao" : (DecisionTreeClassifier, {"hiperparametros" : {"max_depth" : [None, 3, 5, 10] } } ),
+    "Arvore de Decisão" : (DecisionTreeClassifier, {"hiperparametros" : {"max_depth" : [None, 3, 5, 10] } } ),
     "Rede Neural" : (MLPClassifier, {"hiperparametros" : {"max_iter" : [50, 100, 200], "hidden_layer_sizes" : [(15,)] } } ),
     "Floresta Aleatoria" : (RandomForestClassifier, {"hiperparametros" : {"n_estimators" : [10, 20, 50, 100] } } )
 }
 
-# Arquivos para impressão das tabelas de resultados
-for key, _ in classificadores.items():
-    with open("Resultados/Tabelas/" + key.replace(" ", "-") + ".result", "w") as fp:
-        fp.write("Resultados de " + key + "\nBase | Média das Acurácias")
-        for i in range(10):
-            fp.write(" | std Fold " + str(i + 1))
 
 # Impressão dos boxplot de cada experimento mostrando os 10 folds de cada classificador em cada base
 treinamento = dict()
@@ -66,12 +60,8 @@ for key, base in bases.items():
     for ckey, classificador in classificadores.items():
         aux = treinamento[key]["Treinador"].traintest(classificador[0], **classificador[1])
         treinamento[key]["Resultados"][ckey] = aux[2]
-        treinamento[key]["Acuracia"][ckey] = aux[0], aux[1]
-        aux = pd.Series(treinamento[key]["Acuracia"][ckey][0])
-        with open("Resultados/Tabelas/" + ckey.replace(" ", "-") + ".result", "a") as fp:
-            fp.write("\n" + key + " | " + str(pd.Series(treinamento[key]["Acuracia"][ckey][0]).mean()))
-            for v in treinamento[key]["Acuracia"][ckey][1]:
-                fp.write(" | " + str(v))
+        treinamento[key]["Acuracia"][ckey] = aux[0]
+        aux = pd.Series(treinamento[key]["Acuracia"][ckey])
         sea.boxplot(data = treinamento[key]["Resultados"][ckey])
         plt.title("Resultados de " + ckey + " na base " + key + " em cada Fold")
         plt.ylabel("Classes")
@@ -95,3 +85,10 @@ for key, base in treinamento.items():
     plt.legend(legendas, handlelength=0, loc='center left', bbox_to_anchor=(1, 0.5))
     plt.savefig("Resultados/Boxplot/acuracia-" + key.replace(" ", "-") + ".png", bbox_inches="tight")
     plt.clf()
+
+# Arquivos para impressão das tabelas de resultados
+for key, _ in bases.items():
+    with open("Resultados/Tabelas/" + key.replace(" ", "-") + ".result", "w") as fp:
+        fp.write("Resultados de " + key + "\n\\\\Algoritmo & Média das Acurácias & Desvio Padrão das Acurácias")
+        for ckey, resul in treinamento[key]["Acuracia"].items():
+            fp.write("\n\\\\" + str(ckey) + " & " + str(pd.Series(resul).mean()) + " & " + str(pd.Series(resul).std()))
