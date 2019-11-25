@@ -1,6 +1,0 @@
-Resultados de ZeroR
-\\Base & Média das Acurácias & Desvio Padrão das Acurácias
-\\iris & 0.0 & 0.0
-\\digits & 0.09460583488516448 & 0.0038045662236243856
-\\wine & 0.09444444444444444 & 0.23137034369089599
-\\breast cancer & 0.6276629072681704 & 0.18657091287372415

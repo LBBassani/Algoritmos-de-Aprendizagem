@@ -61,13 +61,6 @@ for key, base in bases.items():
         aux = treinamento[key]["Treinador"].traintest(classificador[0], **classificador[1])
         treinamento[key]["Resultados"][ckey] = aux[2]
         treinamento[key]["Acuracia"][ckey] = aux[0]
-        aux = pd.Series(treinamento[key]["Acuracia"][ckey])
-        sea.boxplot(data = treinamento[key]["Resultados"][ckey])
-        plt.title("Resultados de " + ckey + " na base " + key + " em cada Fold")
-        plt.ylabel("Classes")
-        plt.xlabel("Folds")
-        plt.savefig("Resultados/Boxplot/folds-" + ckey.replace(" ", "-") + "-" + key.replace(" ", "-") + ".png")
-        plt.clf()
 
 # Impressão dos boxlplots das acurácias de cada classificador
 for key, base in treinamento.items():

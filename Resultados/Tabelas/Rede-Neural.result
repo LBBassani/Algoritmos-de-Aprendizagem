@@ -1,6 +1,0 @@
-Resultados de Rede Neural
-\\Base & Média das Acurácias & Desvio Padrão das Acurácias
-\\iris & 0.6 & 0.4216370213557839
-\\digits & 0.9204283054003725 & 0.02881658234438274
-\\wine & 0.4333333333333333 & 0.36080233712466825
-\\breast cancer & 0.8244047619047619 & 0.21495618102778025

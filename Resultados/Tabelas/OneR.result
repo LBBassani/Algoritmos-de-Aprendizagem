@@ -1,6 +1,0 @@
-Resultados de OneR
-\\Base & Média das Acurácias & Desvio Padrão das Acurácias
-\\iris & 0.78 & 0.18338383142913564
-\\digits & 0.2676629422718808 & 0.022983831794375437
-\\wine & 0.703921568627451 & 0.24427700780927808
-\\breast cancer & 0.899937343358396 & 0.05664878873707109

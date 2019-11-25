@@ -1,6 +1,0 @@
-Resultados de OneR Probabilistico
-\\Base & Média das Acurácias & Desvio Padrão das Acurácias
-\\iris & 0.7533333333333333 & 0.18067090332602528
-\\digits & 0.19037554314090627 & 0.07805419762334614
-\\wine & 0.6839869281045752 & 0.21001122068180353
-\\breast cancer & 0.8261278195488722 & 0.12570714003920344

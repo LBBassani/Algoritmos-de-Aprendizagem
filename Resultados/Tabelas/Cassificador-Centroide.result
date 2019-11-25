@@ -1,6 +1,0 @@
-Resultados de Cassificador Centroide
-\\Base & Média das Acurácias & Desvio Padrão das Acurácias
-\\iris & 0.9266666666666667 & 0.0857789291805279
-\\digits & 0.8847858472998139 & 0.04158287710150873
-\\wine & 0.7183006535947711 & 0.11502360167519803
-\\breast cancer & 0.8876253132832082 & 0.09645370477097438

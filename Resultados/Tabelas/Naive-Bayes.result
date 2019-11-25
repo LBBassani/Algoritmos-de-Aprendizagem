@@ -1,6 +1,0 @@
-Resultados de Naive Bayes
-\\Base & Média das Acurácias & Desvio Padrão das Acurácias
-\\iris & 0.9466666666666669 & 0.061262438898178756
-\\digits & 0.813066418373681 & 0.060934281391928
-\\wine & 0.961111111111111 & 0.058852772526187785
-\\breast cancer & 0.9367794486215537 & 0.038028274497534126

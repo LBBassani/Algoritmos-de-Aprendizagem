@@ -1,6 +1,0 @@
-Resultados de Arvore de Decisao
-\\Base & Média das Acurácias & Desvio Padrão das Acurácias
-\\iris & 0.9466666666666669 & 0.07568616162633955
-\\digits & 0.8358131595282435 & 0.04436935766213541
-\\wine & 0.8542483660130719 & 0.09823509843039491
-\\breast cancer & 0.9279761904761905 & 0.04328462263902

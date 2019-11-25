@@ -1,6 +1,0 @@
-Resultados de Centroide OneR
-\\Base & Média das Acurácias & Desvio Padrão das Acurácias
-\\iris & 0.78 & 0.18338383142913564
-\\digits & 0.23874612042209806 & 0.022157797679530605
-\\wine & 0.7330065359477125 & 0.24368291547279267
-\\breast cancer & 0.9122180451127818 & 0.059576513037817934

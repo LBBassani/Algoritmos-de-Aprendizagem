@@ -1,6 +1,0 @@
-Resultados de Floresta Aleatoria
-\\Base & Média das Acurácias & Desvio Padrão das Acurácias
-\\iris & 0.9400000000000002 & 0.0733669956409741
-\\digits & 0.9504562383612661 & 0.02914291378526322
-\\wine & 0.9555555555555555 & 0.051052032415148996
-\\breast cancer & 0.956140350877193 & 0.03721614637823934
